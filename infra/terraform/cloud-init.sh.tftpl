@@ -1,0 +1,72 @@
+#!/bin/bash
+# Runs once on first boot. Installs k3s, creates secrets, and hands the cluster to Flux,
+# which keeps it in sync with the k8s/ folder of your GitHub repo from then on.
+# Log: /var/log/cloud-init-output.log
+set -euxo pipefail
+
+# 1. Oracle's Ubuntu images ship iptables REJECT rules that break pod-to-pod traffic.
+sed -i '/-j REJECT --reject-with icmp-host-prohibited/d' /etc/iptables/rules.v4 || true
+iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited || true
+iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited || true
+
+# 2. Install k3s (lightweight Kubernetes). Traefik/ServiceLB are off: Cloudflare Tunnel handles ingress.
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --write-kubeconfig-mode 600" sh -
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+until kubectl get nodes 2>/dev/null | grep -q ' Ready'; do sleep 5; done
+
+# Let the ubuntu user run kubectl
+mkdir -p /home/ubuntu/.kube
+cp /etc/rancher/k3s/k3s.yaml /home/ubuntu/.kube/config
+chown -R ubuntu:ubuntu /home/ubuntu/.kube
+chmod 600 /home/ubuntu/.kube/config
+
+# 3. Secrets (kept out of Git; created here from Terraform values)
+kubectl create namespace app --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl -n app create secret generic db-credentials \
+  --from-literal=username=app \
+  --from-literal=password='${db_password}' \
+  --from-literal=database=app \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl -n app create secret generic cloudflared-token \
+  --from-literal=token='${tunnel_token}' \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl -n app create secret generic backup-s3 \
+  --from-literal=access_key='${s3_access_key}' \
+  --from-literal=secret_key='${s3_secret_key}' \
+  --from-literal=endpoint='${s3_endpoint}' \
+  --from-literal=region='${s3_region}' \
+  --from-literal=bucket='${s3_bucket}' \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+# 4. Flux (GitOps): the cluster pulls changes from GitHub, so GitHub never needs cluster access.
+curl -s https://fluxcd.io/install.sh | bash
+flux install --components=source-controller,kustomize-controller
+
+kubectl apply -f - <<'EOF'
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: app
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/${github_repo}
+  ref:
+    branch: ${github_branch}
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./k8s
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: app
+EOF

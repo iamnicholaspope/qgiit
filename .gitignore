@@ -1,0 +1,8 @@
+app/target/
+.idea/
+*.iml
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.pem

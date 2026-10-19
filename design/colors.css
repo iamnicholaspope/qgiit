@@ -1,0 +1,32 @@
+/* QGIIT color tokens. Source: Figma QGIIT / Colors, Brand mode. */
+:root {
+  --qgiit-primitive-navy-950: #04152D;
+  --qgiit-primitive-navy-900: #06254B;
+  --qgiit-primitive-blue-700: #1459B8;
+  --qgiit-primitive-blue-800: #10468F;
+  --qgiit-primitive-gold-500: #D9AA45;
+  --qgiit-primitive-gold-600: #BE8C2D;
+  --qgiit-primitive-gold-800: #805811;
+  --qgiit-primitive-silver-50: #F5F7FA;
+  --qgiit-primitive-silver-200: #DCE3EC;
+  --qgiit-primitive-silver-600: #52647B;
+  --qgiit-primitive-white: #FFFFFF;
+  --qgiit-surface-page: var(--qgiit-primitive-white);
+  --qgiit-surface-subtle: var(--qgiit-primitive-silver-50);
+  --qgiit-surface-brand: var(--qgiit-primitive-navy-900);
+  --qgiit-surface-deep: var(--qgiit-primitive-navy-950);
+  --qgiit-text-primary: var(--qgiit-primitive-navy-950);
+  --qgiit-text-secondary: var(--qgiit-primitive-silver-600);
+  --qgiit-text-inverse: var(--qgiit-primitive-white);
+  --qgiit-text-accent: var(--qgiit-primitive-gold-800);
+  --qgiit-text-gold: var(--qgiit-primitive-gold-500);
+  --qgiit-border-default: var(--qgiit-primitive-silver-200);
+  --qgiit-border-accent: var(--qgiit-primitive-gold-500);
+  --qgiit-action-primary: var(--qgiit-primitive-gold-500);
+  --qgiit-action-primary-hover: var(--qgiit-primitive-gold-600);
+  --qgiit-action-primary-label: var(--qgiit-primitive-navy-950);
+  --qgiit-action-secondary: var(--qgiit-primitive-blue-700);
+  --qgiit-action-secondary-hover: var(--qgiit-primitive-blue-800);
+  --qgiit-accent-blue: var(--qgiit-primitive-blue-700);
+}
+

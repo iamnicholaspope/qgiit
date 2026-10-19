@@ -1,0 +1,13 @@
+/* Figma: QGIIT / Layout, Desktop mode. */
+:root {
+  --qgiit-space-12: 12px;
+  --qgiit-space-16: 16px;
+  --qgiit-space-24: 24px;
+  --qgiit-space-32: 32px;
+  --qgiit-space-48: 48px;
+  --qgiit-space-80: 80px;
+  --qgiit-space-96: 96px;
+  --qgiit-space-280: 280px;
+  --qgiit-radius-card: 12px;
+  --qgiit-radius-button: 6px;
+}

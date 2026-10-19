@@ -1,0 +1,53 @@
+# Nightly pg_dump uploaded to Oracle Object Storage. Old dumps are deleted by the bucket's lifecycle rule.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 7 * * *" # 07:00 UTC = 3 AM Eastern (EDT)
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: dump
+              emptyDir: {}
+          initContainers:
+            - name: pg-dump
+              image: postgres:17-alpine
+              env:
+                - name: PGHOST
+                  value: postgres
+                - name: PGUSER
+                  valueFrom: { secretKeyRef: { name: db-credentials, key: username } }
+                - name: PGPASSWORD
+                  valueFrom: { secretKeyRef: { name: db-credentials, key: password } }
+                - name: PGDATABASE
+                  valueFrom: { secretKeyRef: { name: db-credentials, key: database } }
+              command: ["sh", "-c", "pg_dump -Fc -f /dump/app-$(date -u +%Y%m%d-%H%M).dump"]
+              volumeMounts:
+                - { name: dump, mountPath: /dump }
+          containers:
+            - name: upload
+              image: rclone/rclone:latest
+              env:
+                - { name: RCLONE_CONFIG_OCI_TYPE, value: s3 }
+                - { name: RCLONE_CONFIG_OCI_PROVIDER, value: Other }
+                - name: RCLONE_CONFIG_OCI_ACCESS_KEY_ID
+                  valueFrom: { secretKeyRef: { name: backup-s3, key: access_key } }
+                - name: RCLONE_CONFIG_OCI_SECRET_ACCESS_KEY
+                  valueFrom: { secretKeyRef: { name: backup-s3, key: secret_key } }
+                - name: RCLONE_CONFIG_OCI_ENDPOINT
+                  valueFrom: { secretKeyRef: { name: backup-s3, key: endpoint } }
+                - name: RCLONE_CONFIG_OCI_REGION
+                  valueFrom: { secretKeyRef: { name: backup-s3, key: region } }
+                - name: BUCKET
+                  valueFrom: { secretKeyRef: { name: backup-s3, key: bucket } }
+              command: ["sh", "-c", "rclone copy /dump oci:$BUCKET/postgres/ --s3-no-check-bucket -v"]
+              volumeMounts:
+                - { name: dump, mountPath: /dump }

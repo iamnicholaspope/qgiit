@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars and fill in. Never commit terraform.tfvars.
+
+# Oracle Cloud (Profile > My profile > API keys > Add API key)
+tenancy_ocid     = "ocid1.tenancy.oc1..xxxx"
+user_ocid        = "ocid1.user.oc1..xxxx"
+fingerprint      = "aa:bb:cc:..."
+private_key_path = "/Users/you/.oci/oci_api_key.pem" # full path
+region           = "us-ashburn-1"
+
+ssh_public_key = "ssh-ed25519 AAAA... you@laptop"
+admin_cidr     = "" # e.g. "203.0.113.10/32" to allow SSH from your IP only
+
+# Cloudflare (dash.cloudflare.com > My Profile > API Tokens)
+cloudflare_api_token  = "xxxx"
+cloudflare_account_id = "xxxx"
+cloudflare_zone_id    = "xxxx" # zone for ddwellers.com (only the dev record is created)
+hostname              = "dev.ddwellers.com"
+
+# GitHub repo Flux deploys from (public repo = no extra credentials)
+github_repo = "your-github-user/spring-k8s-oracle"
