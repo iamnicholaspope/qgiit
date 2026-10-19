@@ -12,5 +12,5 @@ resources:
 # The pipeline updates newName/newTag after each successful build.
 images:
   - name: APP_IMAGE
-    newName: ghcr.io/OWNER/REPO
-    newTag: latest
+    newName: ghcr.io/iamnicholaspope/qgiit
+    newTag: 8ae7fb8fdabc896057fb2ff1cbdc2899268098f5
