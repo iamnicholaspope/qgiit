@@ -1,0 +1,47 @@
+@import url('/qgiit/colors.css');
+
+* { box-sizing: border-box; }
+html { color-scheme: dark; }
+body { margin: 0; color: var(--qgiit-text-inverse); background: var(--qgiit-surface-deep); font-family: "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 80% 40%, #1459b82b, transparent 55%); }
+a { color: inherit; }
+a:focus-visible { outline: 3px solid var(--qgiit-accent-gold, #d9aa45); outline-offset: 8px; border-radius: 8px; }
+.page { position: relative; max-width: 1440px; min-height: 100svh; margin: auto; padding: 34px 6vw 24px; display: flex; flex-direction: column; }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 16px; text-decoration: none; font-size: 24px; font-weight: 650; letter-spacing: 3px; }
+.brand img { border-radius: 50%; width: 64px; height: 64px; }
+.brand-caption { display: block; margin-top: 5px; color: #b6c4d7; font-size: 11px; font-weight: 400; letter-spacing: 1px; }
+.status { display: inline-flex; align-items: center; gap: 10px; color: #c4cfde; font-size: 12px; }
+.status > span { width: 6px; height: 6px; background: #d9aa45; border-radius: 50%; box-shadow: 0 0 16px #d9aa4566; }
+main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.hero { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 48px; padding: 80px 0 72px; }
+.eyebrow { max-width: 410px; color: #d9aa45; font-size: 11px; line-height: 1.9; font-weight: 600; text-transform: uppercase; letter-spacing: 2.1px; }
+h1 { margin: 24px 0; font-size: clamp(56px, 6.4vw, 88px); line-height: 1.04; font-weight: 550; letter-spacing: -4px; }
+h1 em { color: #d9aa45; font-family: Georgia, serif; font-weight: 400; }
+.intro { max-width: 390px; color: #b6c4d7; line-height: 1.8; font-size: 16px; }
+.coming-soon { display: flex; align-items: center; gap: 16px; margin-top: 36px; color: #f1d591; font-size: 13px; text-transform: uppercase; font-weight: 600; letter-spacing: 3px; }
+.line { display: block; width: 44px; height: 1px; background: #d9aa45; }
+.note { margin: 14px 0 0 60px; color: #91a4be; font-size: 12px; }
+.brand-art { position: relative; display: grid; place-items: center; min-width: 0; aspect-ratio: 1; }
+.brand-art img { position: relative; width: 74%; height: auto; border-radius: 50%; box-shadow: 0 24px 80px #0006, 0 0 80px #1459b81a; }
+.orbit { position: absolute; border: 1px solid #d9aa4526; border-radius: 50%; width: 91%; height: 91%; }
+.orbit-two { width: 108%; height: 66%; transform: rotate(-35deg); border-color: #d9aa4540; }
+.orbit-three { width: 98%; height: 98%; border-color: #b6c4d710; }
+.star { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #d9aa45; box-shadow: 0 0 20px #d9aa4577; }
+.star-one { top: 21%; right: 10%; }.star-two { bottom: 21%; left: 10%; width: 4px; height: 4px; }
+.art-caption { position: absolute; bottom: -20px; color: #93a9c4; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; }
+.themes { border-top: 1px solid #ffffff1a; display: flex; gap: 60px; padding: 24px 0; color: #cbd5e2; font-size: 13px; }
+.themes b { margin-right: 12px; color: #d9aa45; font-size: 10px; font-weight: 400; }
+footer { border-top: 1px solid #ffffff1a; display: flex; justify-content: space-between; gap: 24px; padding-top: 22px; color: #91a4be; font-size: 10px; line-height: 1.6; }
+@media (min-width: 1500px) { .page { padding-left: 80px; padding-right: 80px; } }
+@media (max-width: 760px) {
+  .page { padding: 24px; }
+  .status { display: none; }
+  .hero { grid-template-columns: 1fr; gap: 44px; padding: 56px 0 48px; }
+  h1 { font-size: clamp(52px, 12vw, 76px); letter-spacing: -2.5px; }
+  .brand-art { width: min(85%, 380px); margin: 0 auto 24px; }
+  .eyebrow { font-size: 10px; }
+  .themes { justify-content: space-between; gap: 8px; font-size: 11px; }
+  .themes b { margin-right: 5px; }
+  footer { flex-direction: column; gap: 8px; }
+}

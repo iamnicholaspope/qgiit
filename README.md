@@ -23,6 +23,24 @@ Oracle A1 server (k3s) ◀── Flux pulls k8s/ every minute ◀─────
 
 ## Folder layout
 
+### QGIIT public page
+
+The coming-soon page is served by the existing app at `https://dev.ddwellers.com/qgiit/`.
+`/qgiit` redirects to `/qgiit/`; API endpoints remain under `/api/`.
+
+Edit the page and assets in `app/src/main/resources/static/qgiit/`. This initial
+landing page is plain HTML/CSS, ready to be replaced by the React frontend later.
+It uses the QGIIT logo and colors and requests that search engines not index it.
+Commit and push changes to `main` to run tests, build the existing ARM64 image,
+and deploy through Flux. Local saves alone do not publish changes. Pull after CI
+finishes to receive the bot's image-tag commit; never edit that tag manually.
+
+For a static local preview from the repository root, run
+`python -m http.server 8765 --bind 127.0.0.1 --directory app/src/main/resources/static`
+and open `http://127.0.0.1:8765/qgiit/`. This previews assets only; Spring routing is
+covered by `QgiitPageControllerTest`. Run `mvn verify` from `app/` with Java 21
+before deploying.
+
 ```
 app/                 Spring Boot app + Dockerfile
 infra/terraform/     Oracle network, server, backup bucket; Cloudflare tunnel + DNS
