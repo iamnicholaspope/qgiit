@@ -23,7 +23,7 @@ public class NoteController {
 
     @GetMapping("/hello")
     public Map<String, String> hello() {
-        return Map.of("message", "Hello from Spring Boot on Kubernetes");
+        return Map.of("message", "Hello from QGIIT dev");
     }
 
     @GetMapping("/notes")
