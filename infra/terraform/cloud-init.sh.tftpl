@@ -4,6 +4,13 @@
 # Log: /var/log/cloud-init-output.log
 set -euxo pipefail
 
+
+# 0. Wait until networking/DNS is fully up (cloud-init can start before it is)
+for i in $(seq 1 60); do
+  getent hosts update.k3s.io >/dev/null && getent hosts github.com >/dev/null && break
+  sleep 5
+done
+
 # 1. Oracle's Ubuntu images ship iptables REJECT rules that break pod-to-pod traffic.
 sed -i '/-j REJECT --reject-with icmp-host-prohibited/d' /etc/iptables/rules.v4 || true
 iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited || true
