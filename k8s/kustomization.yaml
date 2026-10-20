@@ -13,4 +13,4 @@ resources:
 images:
   - name: APP_IMAGE
     newName: ghcr.io/iamnicholaspope/qgiit
-    newTag: 8ae7fb8fdabc896057fb2ff1cbdc2899268098f5
+    newTag: a9b3f4ee73457ddc5826f56a566b942cde233e2b
