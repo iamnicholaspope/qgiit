@@ -64,6 +64,19 @@ variable "hostname" {
   type        = string
 }
 
+variable "project_hostnames" {
+  description = "Additional project hostname => active Cloudflare zone ID. Add development first; apex/www only at approved production launch."
+  type        = map(string)
+  default     = {}
+  validation {
+    condition = alltrue([for hostname, zone_id in var.project_hostnames :
+      can(regex("^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$", hostname)) &&
+      can(regex("^[a-f0-9]{32}$", zone_id))
+    ])
+    error_message = "Use valid lowercase hostnames and 32-character Cloudflare zone IDs."
+  }
+}
+
 # ---------- GitOps ----------
 variable "github_repo" {
   description = "owner/name of the GitHub repo Flux watches, e.g. BIG-C/spring-k8s-oracle"

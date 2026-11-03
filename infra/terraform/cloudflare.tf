@@ -18,15 +18,19 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "app" {
   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.app.id
 
   config = {
-    ingress = [
+    ingress = concat([
       {
         hostname = var.hostname
         service  = "http://projects-gateway.app.svc.cluster.local:80"
       },
+      ], [for hostname in sort(keys(var.project_hostnames)) : {
+        hostname = hostname
+        service  = "http://projects-gateway.app.svc.cluster.local:80"
+      }], [
       {
         service = "http_status:404"
       },
-    ]
+    ])
   }
 }
 
@@ -42,4 +46,16 @@ resource "cloudflare_dns_record" "app" {
   content = "${cloudflare_zero_trust_tunnel_cloudflared.app.id}.cfargotunnel.com"
   proxied = true
   ttl     = 1
+}
+
+# Enable a hostname only once its Cloudflare zone is ready. Production hostnames
+# can be added at launch independently from development hostnames.
+resource "cloudflare_dns_record" "projects" {
+  for_each = var.project_hostnames
+  zone_id  = each.value
+  name     = each.key
+  type     = "CNAME"
+  content  = "${cloudflare_zero_trust_tunnel_cloudflared.app.id}.cfargotunnel.com"
+  proxied  = true
+  ttl      = 1
 }
