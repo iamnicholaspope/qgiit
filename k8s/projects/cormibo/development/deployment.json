@@ -1,0 +1,77 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "cormibo-development"
+  },
+  "spec": {
+    "replicas": 1,
+    "strategy": {
+      "type": "RollingUpdate",
+      "rollingUpdate": {
+        "maxUnavailable": 0,
+        "maxSurge": 1
+      }
+    },
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "cormibo-development"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app.kubernetes.io/name": "cormibo-development"
+        }
+      },
+      "spec": {
+        "imagePullSecrets": [
+          {
+            "name": "projects-ghcr"
+          }
+        ],
+        "containers": [
+          {
+            "name": "web",
+            "image": "ghcr.io/iamnicholaspope/ddwellers-cormibo@sha256:da0b5d625f31bcbc260f43eb6539591785355e3f5e9c3430dcdd1196d61daa69",
+            "ports": [
+              {
+                "containerPort": 80
+              }
+            ],
+            "env": [
+              {
+                "name": "APP_ENV",
+                "value": "development"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": 80
+              },
+              "periodSeconds": 10
+            },
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": 80
+              },
+              "periodSeconds": 30
+            },
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "64Mi"
+              },
+              "limits": {
+                "cpu": "500m",
+                "memory": "256Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
