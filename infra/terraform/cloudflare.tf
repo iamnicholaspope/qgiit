@@ -21,7 +21,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "app" {
     ingress = [
       {
         hostname = var.hostname
-        service  = "http://app.app.svc.cluster.local:80"
+        service  = "http://projects-gateway.app.svc.cluster.local:80"
       },
       {
         service = "http_status:404"

@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: app
 
 resources:
+  - projects
   - namespace.yaml
   - postgres.yaml
   - app.yaml
