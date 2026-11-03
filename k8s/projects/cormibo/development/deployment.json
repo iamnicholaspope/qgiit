@@ -33,7 +33,7 @@
         "containers": [
           {
             "name": "web",
-            "image": "ghcr.io/iamnicholaspope/ddwellers-cormibo@sha256:da0b5d625f31bcbc260f43eb6539591785355e3f5e9c3430dcdd1196d61daa69",
+            "image": "ghcr.io/iamnicholaspope/ddwellers-cormibo@sha256:2774166dbeac0f7ab8de2be2d02f4c289a20637b548e9bf244e44327def02bd6",
             "ports": [
               {
                 "containerPort": 80
