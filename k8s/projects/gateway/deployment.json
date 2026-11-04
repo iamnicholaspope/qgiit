@@ -17,7 +17,7 @@
           "app.kubernetes.io/name": "projects-gateway"
         },
         "annotations": {
-          "config-sha256": "d14985b7519889f322c7827f96601e421b02461deef3861ba51d163450935b20"
+          "config-sha256": "64b1988ba67de83ce76445093f88c522d1119e395e47baf072d026f8e5a620f1"
         }
       },
       "spec": {
